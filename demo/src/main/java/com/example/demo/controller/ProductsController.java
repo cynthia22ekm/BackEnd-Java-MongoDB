@@ -3,21 +3,19 @@ package com.example.demo.controller;
 import com.example.demo.model.Products;
 import com.example.demo.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/Products")
 public class ProductsController {
 
     @Autowired
     private ProductsService service;
 
-    @GetMapping("/Products")
+    @GetMapping("/GetProducts")
     public List<Products> getProducts()
     {
        return service.getAllProducts();
@@ -27,5 +25,12 @@ public class ProductsController {
     public Products getProduct(@PathVariable String category)
     {
         return service.getProductsByCategory(category);
+    }
+
+   @PostMapping
+   @ResponseStatus(HttpStatus.CREATED)
+    public Products createProducts(@RequestBody Products Product)
+    {
+        return service.addProducts(Product);
     }
 }
