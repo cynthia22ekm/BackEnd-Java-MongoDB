@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Products")
+@RequestMapping("/")
 public class ProductsController {
 
     @Autowired
     private ProductsService service;
 
-    @GetMapping
+    @GetMapping("/Products")
     public List<Products> getProducts()
     {
        return service.getAllProducts();
