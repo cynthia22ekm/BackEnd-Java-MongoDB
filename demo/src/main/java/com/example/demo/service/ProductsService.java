@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,9 +27,16 @@ public class ProductsService {
 
     public PostProductsResponse sendProducts(Products product)
     {
-         repository.save(product);
-        return new PostProductsResponse( "Products Created Successfully", product, HttpStatus.OK);
+        if(product.getCategory().length()==0) {
+            return new PostProductsResponse("Category is mandatory", product, HttpStatus.CONFLICT);
+        }
+        else {
+            repository.save(product);
+            return new PostProductsResponse("Products Created Successfully", product, HttpStatus.OK);
+        }
     }
+
+
 
 
 }
