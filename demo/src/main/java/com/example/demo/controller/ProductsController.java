@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Products;
+import com.example.demo.service.PostProductsResponse;
 import com.example.demo.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,8 +34,8 @@ public class ProductsController {
         return new ResponseEntity<List<Products>>(product,HttpStatus.OK);
     }
 
-    @PostMapping("/PostProducts")
-    public String PostProducts(@RequestBody Products product)
+    @PostMapping("/SendProducts")
+    public PostProductsResponse SendProducts(@RequestBody Products product)
     {
          return service.sendProducts(product);
     }

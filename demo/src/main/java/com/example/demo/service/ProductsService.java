@@ -24,10 +24,10 @@ public class ProductsService {
         return (List<Products>) repository.findByCategory(category);
     }
 
-    public String sendProducts(Products product)
+    public PostProductsResponse sendProducts(Products product)
     {
-        repository.save(product);
-        return "Product Added Successfully";
+         repository.save(product);
+        return new PostProductsResponse( "Products Created Successfully", product, HttpStatus.OK);
     }
 
 
