@@ -53,4 +53,10 @@ public class ProductsService {
             return new PostProductsResponse("Products Updated Successfully", product, HttpStatus.OK);
         }
     }
+    public String deleteProducts(String productId )
+    {
+        Optional<Products> productById  = repository.findById(productId);
+        repository.deleteById(productId);
+        return  "Product deleted successfully";
+    }
 }
