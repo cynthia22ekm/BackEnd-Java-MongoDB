@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Products;
 import com.example.demo.repository.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,19 +16,19 @@ public class ProductsService {
     @Autowired
     private ProductsRepository repository;
 
-    public List<Products> getAllProducts()
-    {
+    public List<Products> getAllProducts() {
         return repository.findAll();
     }
 
-    public Products getProductsByCategory(String category)
-    {
-        return repository.findByCategory(category);
+    public List<Products> getProductsByCategory(String category) {
+        return (List<Products>) repository.findByCategory(category);
     }
 
-    public Products addProducts(Products Product)
+    public String sendProducts(Products product)
     {
-
-        return repository.save(Product);
+        repository.save(product);
+        return "Product Added Successfully";
     }
+
+
 }

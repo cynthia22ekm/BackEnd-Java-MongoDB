@@ -3,6 +3,8 @@ package com.example.demo.repository;
 import com.example.demo.model.Products;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
+
 public interface ProductsRepository extends MongoRepository<Products, String> {
-    Products findByCategory(String category);
+    List<Products> findByCategory(String category);
 }

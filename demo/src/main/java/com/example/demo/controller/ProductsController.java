@@ -4,6 +4,7 @@ import com.example.demo.model.Products;
 import com.example.demo.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,15 +23,21 @@ public class ProductsController {
     }
 
     @GetMapping("/{category}")
-    public Products getProduct(@PathVariable String category)
+    public ResponseEntity<List<Products>> getProductsByCategory(@PathVariable String category)
     {
-        return service.getProductsByCategory(category);
+        List<Products> product =  service.getProductsByCategory(category);
+        if(product == null)
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<List<Products>>(product,HttpStatus.OK);
     }
 
-   @PostMapping
-   @ResponseStatus(HttpStatus.CREATED)
-    public Products createProducts(@RequestBody Products Product)
+    @PostMapping("/PostProducts")
+    public String PostProducts(@RequestBody Products product)
     {
-        return service.addProducts(Product);
+         return service.sendProducts(product);
     }
+
+
 }
