@@ -25,8 +25,13 @@ public class ProductsService {
 
     public PostProductsResponse sendProducts(Products product)
     {
+        Optional<Products> productById = repository.findById(product.getId());
         if(product.getCategory().length()==0) {
             return new PostProductsResponse("Category is mandatory", product, HttpStatus.CONFLICT);
+        }
+        if(productById.isPresent())
+        {
+            return new PostProductsResponse("Product with same ID exist in Database", product, HttpStatus.CONFLICT);
         }
         else {
             repository.save(product);
