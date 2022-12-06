@@ -56,7 +56,13 @@ public class ProductsService {
     public String deleteProducts(String productId )
     {
         Optional<Products> productById  = repository.findById(productId);
-        repository.deleteById(productId);
-        return  "Product deleted successfully";
+        if(!(productById.isPresent()))
+        {
+            return "Product does not exist in Database";
+        }
+        else {
+            repository.deleteById(productId);
+            return "Product deleted successfully";
+        }
     }
 }
