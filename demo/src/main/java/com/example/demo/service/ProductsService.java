@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -34,6 +35,17 @@ public class ProductsService {
     }
 
 
+    public PostProductsResponse updateProducts(Products product) {
 
-
+        Optional<Products> productById = repository.findById(product.getId());
+        System.out.println("Product ID"+productById);
+        if(!(productById.isPresent()))
+        {
+            return new PostProductsResponse("Product does not Exist in Database", product, HttpStatus.CONFLICT);
+        }
+        else {
+            repository.save(product);
+            return new PostProductsResponse("Products Updated Successfully", product, HttpStatus.OK);
+        }
+    }
 }
