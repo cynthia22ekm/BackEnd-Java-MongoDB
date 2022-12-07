@@ -1,5 +1,4 @@
 package com.example.demo.controller;
-
 import com.example.demo.model.Products;
 import com.example.demo.service.PostProductsResponse;
 import com.example.demo.service.ProductsService;
@@ -17,13 +16,14 @@ public class ProductsController {
     @Autowired
     private ProductsService service;
 
-    @GetMapping("/GetProducts")
+
+    @RequestMapping(value="/GetProducts", method= RequestMethod.GET)
     public List<Products> getProducts()
     {
        return service.getAllProducts();
     }
 
-    @GetMapping("/{category}")
+    @RequestMapping(value="/{category}", method= RequestMethod.GET)
     public ResponseEntity<List<Products>> getProductsByCategory(@PathVariable String category)
     {
         List<Products> product =  service.getProductsByCategory(category);
@@ -34,19 +34,20 @@ public class ProductsController {
         return new ResponseEntity<List<Products>>(product,HttpStatus.OK);
     }
 
-    @PostMapping("/SendProducts")
+    @RequestMapping(value="/SendProducts", method= RequestMethod.POST)
     public PostProductsResponse SendProducts(@RequestBody Products product)
     {
          return service.sendProducts(product);
     }
 
-    @PutMapping("/UpdateProducts")
+
+    @RequestMapping(value="/UpdateProducts", method= RequestMethod.PUT)
     public PostProductsResponse UpdateProducts(@RequestBody Products product)
     {
          return service.updateProducts(product);
     }
 
-    @DeleteMapping("/deleteProduct/{id}")
+    @RequestMapping(value="/deleteProduct/{id}", method= RequestMethod.DELETE)
     public String deleteProductById(@PathVariable String id)
     {
         return service.deleteProducts(id);
