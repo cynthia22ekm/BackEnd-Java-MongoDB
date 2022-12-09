@@ -23,7 +23,6 @@ public class UserRegistrationService {
       }
       else
           return new GetResponse(allUsers, HttpStatus.OK, "Data retrieved successfully");
-
     }
 
     public PostUserResponse postUser(User user)
@@ -46,7 +45,6 @@ public class UserRegistrationService {
     {
         String userId = user.getUserId();
         User existingUser = repository.findByUserId(userId);
-
         if(existingUser == null) {
             return new PostUserResponse(null, HttpStatus.CONFLICT, "User data does not exist in DB for updation");
         }
@@ -58,7 +56,11 @@ public class UserRegistrationService {
             existingUser.setPhone(user.getPhone());
             repository.save(existingUser);
             return new PostUserResponse(user, HttpStatus.OK, "User data updated successfully");
-
         }
+    }
+    public String deleteUser(String userId )
+    {
+        repository.deleteByUserId(userId);
+        return "User deleted successfully";
     }
 }

@@ -34,4 +34,10 @@ public class UserRegistrationController {
         return service.updateUser(user);
     }
 
+    @RequestMapping(value="/DeleteUser/{userId}", method = RequestMethod.DELETE)
+    public String  deleteUser(@PathVariable String userId)
+    {
+        return service.deleteUser(userId);
+    }
+
 }

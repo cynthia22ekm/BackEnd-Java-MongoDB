@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface UserRegistrationRepository extends MongoRepository<User, ObjectId> {
 
     User findByUserId(String userId);
+
+    void deleteByUserId(String userId);
 }
