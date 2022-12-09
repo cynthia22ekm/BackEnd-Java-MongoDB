@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Setter
 @Getter
-public class PostProductsResponse {
+public class PostProductResponse {
 
     private String message;
-    private Products data;
+    private Products product;
     private HttpStatus status;
 }
