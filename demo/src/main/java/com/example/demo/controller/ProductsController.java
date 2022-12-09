@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 import com.example.demo.model.Products;
-import com.example.demo.service.PostProductsResponse;
+import com.example.demo.service.PostProductResponse;
 import com.example.demo.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,14 +35,14 @@ public class ProductsController {
     }
 
     @RequestMapping(value="/SendProducts", method= RequestMethod.POST)
-    public PostProductsResponse SendProducts(@RequestBody Products product)
+    public PostProductResponse SendProducts(@RequestBody Products product)
     {
-         return service.sendProducts(product);
+        return service.sendProducts(product);
     }
 
 
     @RequestMapping(value="/UpdateProducts", method= RequestMethod.PUT)
-    public PostProductsResponse UpdateProducts(@RequestBody Products product)
+    public PostProductResponse UpdateProducts(@RequestBody Products product)
     {
          return service.updateProducts(product);
     }
