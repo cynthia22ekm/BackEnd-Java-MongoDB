@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
-public class GetResponse {
+public class GetUserResponse {
     private List<User> data;
     private HttpStatus status;
     private String message;
