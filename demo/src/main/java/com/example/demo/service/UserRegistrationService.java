@@ -14,21 +14,20 @@ public class UserRegistrationService {
     @Autowired
     private UserRegistrationRepository repository;
 
-    public GetResponse getAllUsers()
+    public GetUserResponse getAllUsers()
     {
      List<User> allUsers =  repository.findAll();
       if(allUsers.size() ==0 )
       {
-          return new GetResponse(null, HttpStatus.CONFLICT, "No data exists in DB");
+          return new GetUserResponse(null, HttpStatus.CONFLICT, "No data exists in DB");
       }
       else
-          return new GetResponse(allUsers, HttpStatus.OK, "Data retrieved successfully");
+          return new GetUserResponse(allUsers, HttpStatus.OK, "Data retrieved successfully");
     }
 
     public PostUserResponse postUser(User user)
     {
         String userId = user.getUserId();
-        System.out.println("User id is"+userId);
       User existingUser = repository.findByUserId(userId);
         System.out.println("User  is"+existingUser);
         if(existingUser == null) {
