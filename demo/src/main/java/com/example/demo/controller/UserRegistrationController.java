@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import com.example.demo.service.GetResponse;
+import com.example.demo.service.GetUserResponse;
 import com.example.demo.service.PostUserResponse;
 import com.example.demo.service.UserRegistrationService;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+//https://www.javaguides.net/2021/10/login-and-registration-rest-api-using-spring-boot-spring-security-hibernate-mysql-database.html
+//https://www.youtube.com/watch?v=sm-8qfMWEV8&list=PLqq-6Pq4lTTYTEooakHchTGglSvkZAjnE
 @RestController
 @RequestMapping("/User")
 public class UserRegistrationController {
@@ -18,9 +19,9 @@ public class UserRegistrationController {
     private UserRegistrationService service;
 
     @RequestMapping(value="/GetUsers", method= RequestMethod.GET)
-    public GetResponse getUsers()
+    public GetUserResponse getUsers()
     {
-        return (GetResponse) service.getAllUsers();
+        return (GetUserResponse) service.getAllUsers();
     }
 
     @RequestMapping(value="/CreateUser", method=RequestMethod.POST)
