@@ -25,11 +25,16 @@ public class UserRegistrationService {
           return new GetUserResponse(allUsers, HttpStatus.OK, "Data retrieved successfully");
     }
 
+    public User getUserByUserName(String userName)
+    {
+        User user = repository.findByUserName(userName);
+        return user;
+    }
+
     public PostUserResponse postUser(User user)
     {
         String userId = user.getUserId();
       User existingUser = repository.findByUserId(userId);
-        System.out.println("User  is"+existingUser);
         if(existingUser == null) {
             repository.save(user);
             return new PostUserResponse(user,HttpStatus.OK,"User data saved successfully");

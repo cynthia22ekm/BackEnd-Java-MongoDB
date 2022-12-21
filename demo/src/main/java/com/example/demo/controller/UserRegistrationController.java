@@ -4,6 +4,7 @@ import com.example.demo.model.User;
 import com.example.demo.service.GetUserResponse;
 import com.example.demo.service.PostUserResponse;
 import com.example.demo.service.UserRegistrationService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +19,19 @@ public class UserRegistrationController {
     @Autowired
     private UserRegistrationService service;
 
+
     @RequestMapping(value="/GetUsers", method= RequestMethod.GET)
     public GetUserResponse getUsers()
     {
         return (GetUserResponse) service.getAllUsers();
+    }
+
+    @RequestMapping(value="/GetUserByUserName/{userName}", method= RequestMethod.GET)
+    public User getUserWithUserName(@PathVariable String userName)
+    {
+
+        return service.getUserByUserName(userName);
+
     }
 
     @RequestMapping(value="/CreateUser", method=RequestMethod.POST)
