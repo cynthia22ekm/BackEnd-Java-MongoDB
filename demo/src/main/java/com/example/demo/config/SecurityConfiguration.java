@@ -1,4 +1,6 @@
 package com.example.demo.config;
+import com.example.demo.controller.UserRegistrationController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,10 +19,16 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Autowired
+    private UserRegistrationController userRegistrationController;
+
     @Bean
-    public InMemoryUserDetailsManager userDetailsManager()
+    public InMemoryUserDetailsManager userDetailsService()
     {
-        UserDetails user = User.withDefaultPasswordEncoder().username("User").password("password").roles("USER").build();
+
+        String userName = userRegistrationController.getUserWithUserName("sansa").getUserName();
+        String password = userRegistrationController.getUserWithUserName("sansa").getPassword();
+        UserDetails user = User.withDefaultPasswordEncoder().username(userName).password(password).roles("USER").build();
         return new InMemoryUserDetailsManager(user);
     }
 
