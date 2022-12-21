@@ -4,6 +4,7 @@ import com.example.demo.model.User;
 import com.example.demo.repository.UserRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class UserRegistrationService {
 
     @Autowired
     private UserRegistrationRepository repository;
+
 
     public GetUserResponse getAllUsers()
     {
@@ -36,6 +38,8 @@ public class UserRegistrationService {
         String userId = user.getUserId();
       User existingUser = repository.findByUserId(userId);
         if(existingUser == null) {
+            String encodedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+            user.setPassword(encodedPassword);
             repository.save(user);
             return new PostUserResponse(user,HttpStatus.OK,"User data saved successfully");
         }
