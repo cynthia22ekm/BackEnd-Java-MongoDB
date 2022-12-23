@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Login;
 import com.example.demo.model.User;
 import com.example.demo.service.GetUserResponse;
+import com.example.demo.service.LoginResponse;
 import com.example.demo.service.PostUserResponse;
 import com.example.demo.service.UserRegistrationService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +21,7 @@ public class UserRegistrationController {
     @Autowired
     private UserRegistrationService service;
 
-
-    @RequestMapping(value="/GetUsers", method= RequestMethod.GET)
+     @RequestMapping(value="/GetUsers", method= RequestMethod.GET)
     public GetUserResponse getUsers()
     {
         return (GetUserResponse) service.getAllUsers();
@@ -29,15 +30,23 @@ public class UserRegistrationController {
     @RequestMapping(value="/GetUserByUserName/{userName}", method= RequestMethod.GET)
     public User getUserWithUserName(@PathVariable String userName)
     {
-
         return service.getUserByUserName(userName);
+    }
 
+    @RequestMapping(value="/Login", method=RequestMethod.POST)
+    public LoginResponse UserLogin(@RequestBody Login data )
+    {
+        System.out.println("Username inside login controller is"+data.getUsername());
+        System.out.println("Password inside login controller is"+data.getPassword());
+       String userName = data.getUsername();
+       String password =data.getPassword();
+       return service.login(userName, password);
     }
 
     @RequestMapping(value="/CreateUser", method=RequestMethod.POST)
     public PostUserResponse createUser(@RequestBody User user)
     {
-        return service.postUser(user);
+          return service.postUser(user);
     }
 
     @RequestMapping(value="/UpdateUser", method=RequestMethod.PUT)
