@@ -4,7 +4,7 @@ import com.example.demo.model.User;
 import com.example.demo.repository.UserRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -33,12 +33,32 @@ public class UserRegistrationService {
         return user;
     }
 
+    public LoginResponse login(String userName, String password)
+    {
+        User user = getUserByUserName(userName);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(password);
+        System.out.println("Endoed password from db is "+user.getPassword());
+        System.out.println("Encoded password from user is "+encodedPassword);
+        if(user == null) {
+            return new LoginResponse(false,"User does not exists in the system");
+         }
+       else if(passwordEncoder.matches(password,user.getPassword()))
+        {
+            return new LoginResponse(true,"Logged In Successfullly");
+        }
+        else {
+            return new LoginResponse(false,"Logged In Failed");
+        }
+    }
     public PostUserResponse postUser(User user)
     {
         String userId = user.getUserId();
       User existingUser = repository.findByUserId(userId);
         if(existingUser == null) {
-            String encodedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+           // String encodedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(encodedPassword);
             repository.save(user);
             return new PostUserResponse(user,HttpStatus.OK,"User data saved successfully");
