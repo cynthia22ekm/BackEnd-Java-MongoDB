@@ -1,41 +1,57 @@
 package com.example.demo.config;
-import com.example.demo.controller.UserRegistrationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 //https://betterjavacode.com/programming/spring-security-filter-chain
 //https://stackoverflow.com/questions/72381114/spring-security-upgrading-the-deprecated-websecurityconfigureradapter-in-spring
 //https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
+//https://www.youtube.com/watch?v=F31lvNRil10
+//https://stackoverflow.com/questions/73322338/spring-security-5-7-multiple-authentication-provider-without-websecurityconfig
+//https://reflectoring.io/spring-security-password-handling/
+//https://stackoverflow.com/questions/71281032/spring-security-exposing-authenticationmanager-without-websecurityconfigureradap
+//How to store hashed password in MongoDB?
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
     @Autowired
-    private UserRegistrationController userRegistrationController;
+    private CustomUserDetailService customUserDetailService;
 
     @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(customUserDetailService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+  /* @Bean
     public InMemoryUserDetailsManager userDetailsService()
     {
-
-        String userName = userRegistrationController.getUserWithUserName("sansa").getUserName();
-        String password = userRegistrationController.getUserWithUserName("sansa").getPassword();
-        UserDetails user = User.withDefaultPasswordEncoder().username(userName).password(password).roles("USER").build();
+        UserDetails user = User.withDefaultPasswordEncoder().username("sansa").password("12345").roles("USER").build();
         return new InMemoryUserDetailsManager(user);
+    }*/
+
+   @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
-@Bean
+    @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        return http.csrf().disable().authorizeRequests().antMatchers("/").permitAll().antMatchers("/").hasRole("USER").anyRequest().authenticated().and().httpBasic()
-                .and().build();
+         http.cors().and().csrf().disable().authorizeRequests().antMatchers("/").permitAll().antMatchers("/").hasRole("USER").anyRequest().authenticated().and().httpBasic();
+        http.authenticationProvider(authenticationProvider());
+        return http.build();
     }
+
+
+
 
 }
