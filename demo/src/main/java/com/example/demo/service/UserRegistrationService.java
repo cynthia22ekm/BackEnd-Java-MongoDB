@@ -1,5 +1,4 @@
 package com.example.demo.service;
-
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +8,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
+
 @Service
 public class UserRegistrationService {
 
     @Autowired
     private UserRegistrationRepository repository;
+
+    @Autowired
+    private SequenceGeneratorService generateSequence;
 
 
     public GetUserResponse getAllUsers()
@@ -38,8 +41,7 @@ public class UserRegistrationService {
         User user = getUserByUserName(userName);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(password);
-        System.out.println("Endoed password from db is "+user.getPassword());
-        System.out.println("Encoded password from user is "+encodedPassword);
+
         if(user == null) {
             return new LoginResponse(false,"User does not exists in the system");
          }
@@ -53,26 +55,18 @@ public class UserRegistrationService {
     }
     public PostUserResponse postUser(User user)
     {
-        String userId = user.getUserId();
-      User existingUser = repository.findByUserId(userId);
-        if(existingUser == null) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(user.getPassword());
            // String encodedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(encodedPassword);
+            user.setId(generateSequence.generateSequence(user.SEQUENCE_NAME));
             repository.save(user);
             return new PostUserResponse(user,HttpStatus.OK,"User data saved successfully");
-        }
-        else
-        {
-            return new PostUserResponse(null, HttpStatus.CONFLICT, "User data already exists");
-        }
     }
 
-    public PostUserResponse updateUser(User user)
+    public PostUserResponse updateUser(Long userId, User user)
     {
-        String userId = user.getUserId();
-        User existingUser = repository.findByUserId(userId);
+        User existingUser = repository.findById(userId).get();
         if(existingUser == null) {
             return new PostUserResponse(null, HttpStatus.CONFLICT, "User data does not exist in DB for updation");
         }
@@ -82,13 +76,13 @@ public class UserRegistrationService {
             existingUser.setLastName(user.getLastName());
             existingUser.setEmail(user.getEmail());
             existingUser.setPhone(user.getPhone());
-            repository.save(existingUser);
+             repository.save(existingUser);
             return new PostUserResponse(user, HttpStatus.OK, "User data updated successfully");
         }
     }
-    public String deleteUser(String userId )
+    public String deleteUser(Long userId )
     {
-        repository.deleteByUserId(userId);
+        repository.deleteById(userId);
         return "User deleted successfully";
     }
 }
