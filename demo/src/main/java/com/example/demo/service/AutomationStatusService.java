@@ -33,7 +33,6 @@ public class AutomationStatusService {
     {
         String statusId = automationStatus.getId();
         Optional<AutomationStatus> existingStatus = repository.findById(statusId);
-        System.out.println("id is"+existingStatus);
         if(!existingStatus.isPresent()) {
             repository.save(automationStatus);
             return new PostAutomationStatusResponse(automationStatus,HttpStatus.OK,"Automation Status data saved successfully");
