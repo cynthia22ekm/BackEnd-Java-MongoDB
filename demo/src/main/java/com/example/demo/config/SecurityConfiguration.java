@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
+//References
 //https://betterjavacode.com/programming/spring-security-filter-chain
 //https://stackoverflow.com/questions/72381114/spring-security-upgrading-the-deprecated-websecurityconfigureradapter-in-spring
 //https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 //https://stackoverflow.com/questions/73322338/spring-security-5-7-multiple-authentication-provider-without-websecurityconfig
 //https://reflectoring.io/spring-security-password-handling/
 //https://stackoverflow.com/questions/71281032/spring-security-exposing-authenticationmanager-without-websecurityconfigureradap
-//How to store hashed password in MongoDB?
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -50,8 +50,4 @@ public class SecurityConfiguration {
         http.authenticationProvider(authenticationProvider());
         return http.build();
     }
-
-
-
-
 }
