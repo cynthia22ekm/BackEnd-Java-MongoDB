@@ -1,12 +1,14 @@
 package com.example.demo.model;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+//References
+//https://www.youtube.com/watch?v=x980d_aFJ2s(Auto generate id in MOngoDB using spring boot)
 
 @Setter
 @Getter
@@ -15,9 +17,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="User")
 public class User {
 
+    @Transient
+    public static final String SEQUENCE_NAME = "users_sequence";
+
     @Id
-    private ObjectId id;
-    private String userId;
+    private Long id;
     private String firstName;
     private String lastName;
     private String userName;
