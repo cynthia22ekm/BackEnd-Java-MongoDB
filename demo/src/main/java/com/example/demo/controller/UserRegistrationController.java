@@ -1,17 +1,17 @@
 package com.example.demo.controller;
-
 import com.example.demo.model.Login;
 import com.example.demo.model.User;
 import com.example.demo.service.GetUserResponse;
 import com.example.demo.service.LoginResponse;
 import com.example.demo.service.PostUserResponse;
 import com.example.demo.service.UserRegistrationService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+//References
 //https://www.javaguides.net/2021/10/login-and-registration-rest-api-using-spring-boot-spring-security-hibernate-mysql-database.html
 //https://www.youtube.com/watch?v=sm-8qfMWEV8&list=PLqq-6Pq4lTTYTEooakHchTGglSvkZAjnE
 @RestController
@@ -36,11 +36,9 @@ public class UserRegistrationController {
     @RequestMapping(value="/Login", method=RequestMethod.POST)
     public LoginResponse UserLogin(@RequestBody Login data )
     {
-        System.out.println("Username inside login controller is"+data.getUsername());
-        System.out.println("Password inside login controller is"+data.getPassword());
-       String userName = data.getUsername();
+       String username = data.getUsername();
        String password =data.getPassword();
-       return service.login(userName, password);
+       return service.login(username, password);
     }
 
     @RequestMapping(value="/CreateUser", method=RequestMethod.POST)
@@ -49,13 +47,13 @@ public class UserRegistrationController {
           return service.postUser(user);
     }
 
-    @RequestMapping(value="/UpdateUser", method=RequestMethod.PUT)
-    public PostUserResponse updateUser(@RequestBody User user) {
-        return service.updateUser(user);
+    @RequestMapping(value="/UpdateUser/{userId}", method=RequestMethod.PUT)
+    public PostUserResponse updateUser(@PathVariable Long userId ,@RequestBody User user) {
+        return service.updateUser(userId,user);
     }
 
     @RequestMapping(value="/DeleteUser/{userId}", method = RequestMethod.DELETE)
-    public String  deleteUser(@PathVariable String userId)
+    public String  deleteUser(@PathVariable Long userId)
     {
         return service.deleteUser(userId);
     }
