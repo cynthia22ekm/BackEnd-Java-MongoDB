@@ -43,8 +43,7 @@ public class ProductsService {
     public PostProductResponse updateProducts(Products product) {
 
         Optional<Products> productById = repository.findById(product.getId());
-        System.out.println("Product ID"+productById);
-        if(!(productById.isPresent()))
+         if(!(productById.isPresent()))
         {
             return new PostProductResponse("Product does not Exist in Database", product, HttpStatus.CONFLICT);
         }
