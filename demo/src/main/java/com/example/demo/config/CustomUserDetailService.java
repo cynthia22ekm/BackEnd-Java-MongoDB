@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +20,6 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
         UserDetails user =  org.springframework.security.core.userdetails.User.withUsername(singleuser.getUserName()).password(singleuser.getPassword()).roles("USER").build();
-        System.out.println("user isnide customuserdetails"+user);
         return user;
     }
 }
