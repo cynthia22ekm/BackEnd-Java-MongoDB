@@ -1,3 +1,4 @@
+
 package com.example.demo.config;
 
 import com.example.demo.model.User;
@@ -16,10 +17,13 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
           User singleuser = repository.findByUserName(username);
+        System.out.println("User in user details service is "+singleuser);
         if (singleuser == null) {
             throw new UsernameNotFoundException(username);
         }
         UserDetails user =  org.springframework.security.core.userdetails.User.withUsername(singleuser.getUserName()).password(singleuser.getPassword()).roles("USER").build();
+        System.out.println("User in user details service is "+user);
         return user;
     }
 }
+
