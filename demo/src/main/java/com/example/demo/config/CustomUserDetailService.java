@@ -14,10 +14,10 @@ public class CustomUserDetailService implements UserDetailsService {
     @Autowired
     private UserRegistrationRepository repository;
 
-    @Override
+   @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-          User singleuser = repository.findByUserName(username);
-        System.out.println("User in user details service is "+singleuser);
+         User singleuser = repository.findByUserName(username);
+         System.out.println("User in user details service is "+singleuser);
         if (singleuser == null) {
             throw new UsernameNotFoundException(username);
         }
