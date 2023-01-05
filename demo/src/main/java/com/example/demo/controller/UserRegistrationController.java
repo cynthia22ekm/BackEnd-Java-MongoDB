@@ -33,6 +33,12 @@ public class UserRegistrationController {
         return service.getUserByUserName(userName);
     }
 
+    @RequestMapping(value="/GetUserByEmail/{email}", method= RequestMethod.GET)
+    public User getUserWithEmail(@PathVariable String email)
+    {
+        return service.getUserByEmail(email);
+    }
+
     @RequestMapping(value="/Login", method=RequestMethod.POST)
     public LoginResponse UserLogin(@RequestBody Login data )
     {

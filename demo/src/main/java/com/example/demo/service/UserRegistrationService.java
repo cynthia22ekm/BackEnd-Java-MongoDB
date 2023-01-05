@@ -36,6 +36,12 @@ public class UserRegistrationService {
         return user;
     }
 
+    public User getUserByEmail(String email)
+    {
+        User user = repository.findByEmail(email);
+        return user;
+    }
+
     public LoginResponse login(String userName, String password)
     {
         User user = getUserByUserName(userName);
