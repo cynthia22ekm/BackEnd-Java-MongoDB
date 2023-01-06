@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.model.AutomationStatus;
-import com.example.demo.model.Products;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
