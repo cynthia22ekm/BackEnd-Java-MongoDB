@@ -4,8 +4,9 @@ import com.example.demo.config.EmailServiceImpl;
 import com.example.demo.model.ChangePassword;
 import com.example.demo.model.CreateToken;
 import com.example.demo.model.User;
-import com.example.demo.service.CreateTokenResponse;
+import com.example.demo.service.TokenResponse;
 import com.example.demo.service.PasswordResetTokenService;
+import com.example.demo.service.UpdatePasswordResponse;
 import com.example.demo.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -27,12 +28,13 @@ public class PasswordResetController {
     private UserRegistrationService registrationService;
 
     @RequestMapping(value = "/CreateToken",method= RequestMethod.POST)
-    public CreateTokenResponse getToken(@RequestBody CreateToken tokenData, HttpServletRequest request)
+    public TokenResponse getToken(@RequestBody CreateToken tokenData, HttpServletRequest request)
     {
 
-        User user = registrationService.getUserByEmail(tokenData.getEmail());
+        //User user = registrationService.getUserByEmail(tokenData.getEmail());
+        User user = registrationService.getUserByUserName(tokenData.getEmail());
         if (user == null) {
-            return new CreateTokenResponse(null, "User does not exists in the database");
+            return new TokenResponse(null, "User does not exists in the database", false);
         } else
         {
             String token =  service.generateToken(tokenData.getEmail()).getToken();
@@ -43,23 +45,22 @@ public class PasswordResetController {
     }
 
     @RequestMapping(value = "/ValidateToken/{token}",method= RequestMethod.GET)
-    public String redirectToChangePasswordPage(@PathVariable String token, Model model)
+    public TokenResponse redirectToChangePasswordPage(@PathVariable String token, Model model)
     {
-        boolean isTokenValid = service.validatePasswordResetToken(token);
+        boolean isTokenValid = service.validatePasswordResetToken(token).getStatus();
         if(isTokenValid)
         {
 
             model.addAttribute("token", token);
-            System.out.println("Model is "+model);
-            return "Navigate to Reset Password page";
+            return new TokenResponse(token,"Navigate to Reset Password page", true);
         }
         else {
-             return "Token is invalid or empty";
+             return new TokenResponse(token,"Token is invalid or empty", false);
         }
     }
 
     @RequestMapping(value = "/ResetPassword",method= RequestMethod.POST)
-    public String resetPassword(@RequestBody ChangePassword passwordData)
+    public UpdatePasswordResponse resetPassword(@RequestBody ChangePassword passwordData)
     {
     return service.updatePassword(passwordData);
     }
