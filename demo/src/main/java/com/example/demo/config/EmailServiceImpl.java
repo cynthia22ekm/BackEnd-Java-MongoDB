@@ -29,7 +29,8 @@ public class EmailServiceImpl {
         System.out.println("Body of email is "+body);
         email.setSubject(subject);
         email.setText(body);
-        email.setTo(user.getEmail());
+       // email.setTo(user.getEmail());
+        email.setTo(user.getUsername());
         email.setFrom("testemailcyn124@gmail.com");
         emailSender.send(email);
     }
