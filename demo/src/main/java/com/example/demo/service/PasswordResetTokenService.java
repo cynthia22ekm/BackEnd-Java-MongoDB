@@ -27,7 +27,7 @@ public class PasswordResetTokenService {
     private UserRegistrationService service;
 
 
-    public CreateTokenResponse generateToken(String email) {
+    public TokenResponse generateToken(String email) {
 
         PasswordResetToken fetchedtoken = repository.findByEmail(email);
         Date date = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(10));
@@ -35,47 +35,48 @@ public class PasswordResetTokenService {
             String token = UUID.randomUUID().toString();
             PasswordResetToken myToken = new PasswordResetToken(UUID.randomUUID().toString(), token, email, date);
             repository.save(myToken);
-            return new CreateTokenResponse(token, "Token created successfully");
+            return new TokenResponse(token, "Token created successfully", true);
         } else {
             String token = UUID.randomUUID().toString();
             Date updatedDate = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(10));
             fetchedtoken.setToken(token);
             fetchedtoken.setExpiryDate(updatedDate);
             repository.save(fetchedtoken);
-            return new CreateTokenResponse(fetchedtoken.getToken(),  "Token updated successfully");
+            return new TokenResponse(fetchedtoken.getToken(),  "Token updated successfully", true);
         }
 
     }
 
-    public boolean validatePasswordResetToken(String token)
+    public TokenResponse validatePasswordResetToken(String token)
     {
         PasswordResetToken passwordToken =  repository.findByToken(token);
         if(passwordToken == null)
         {
-            return false;
+            return new TokenResponse(token,"PasswordToken is empty",false);
         }
         else {
             Calendar cal = Calendar.getInstance();
-            return passwordToken.getExpiryDate().after(cal.getTime());
+            return new TokenResponse(token,"PasswordToken status",passwordToken.getExpiryDate().after(cal.getTime()));
         }
 
     }
 
-    public String updatePassword(ChangePassword passwordData){
+    public UpdatePasswordResponse updatePassword(ChangePassword passwordData){
 
         if(passwordData.getNewPassword().equals(passwordData.getConfirmPassword()))
         {
             String email = repository.findByToken(passwordData.getToken()).getEmail();
-            User existingUser = userRepository.findByEmail(email);
+            //User existingUser = userRepository.findByEmail(email);
+            User existingUser = userRepository.findByUsername(email);
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(passwordData.getNewPassword());
             existingUser.setPassword(encodedPassword);
             userRepository.save(existingUser);
-            return "Password Updated Successfully";
+            return new UpdatePasswordResponse("Password Updated Successfully", true);
         }
         else
         {
-            return "Passwords do not match";
+            return new UpdatePasswordResponse("Passwords do not match", false);
         }
 
     }
